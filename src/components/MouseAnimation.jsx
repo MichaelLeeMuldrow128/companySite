@@ -1,9 +1,19 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useMemo } from 'react'
 
 const MouseAnimation = () => {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 })
   const [isHovering, setIsHovering] = useState(false)
   const [windowSize, setWindowSize] = useState({ width: 0, height: 0 })
+
+  // Generate stable star positions
+  const starPositions = useMemo(() => {
+    return [...Array(12)].map(() => ({
+      top: Math.random() * 100,
+      left: Math.random() * 100,
+      delay: Math.random() * 3,
+      duration: 3 + Math.random() * 2,
+    }))
+  }, [])
 
   useEffect(() => {
     const updateWindowSize = () => {
@@ -46,7 +56,7 @@ const MouseAnimation = () => {
 
   return (
     <>
-      {/* Cursor glow effect */}
+      {/* Cursor glow effect - smaller */}
       <div
         className="fixed pointer-events-none z-[9999] mix-blend-difference transition-opacity duration-300"
         style={{
@@ -57,9 +67,9 @@ const MouseAnimation = () => {
         }}
       >
         <div
-          className="w-8 h-8 rounded-full bg-white blur-xl"
+          className="w-4 h-4 rounded-full bg-white blur-lg"
           style={{
-            boxShadow: '0 0 40px 20px rgba(255, 255, 255, 0.3)',
+            boxShadow: '0 0 20px 8px rgba(255, 255, 255, 0.25)',
           }}
         />
       </div>
@@ -114,25 +124,131 @@ const MouseAnimation = () => {
         })}
       </div>
 
-      {/* Interactive glow trail */}
+      {/* Interactive glow trail - smaller */}
       <div
         className="fixed pointer-events-none z-[9998]"
         style={{
           left: `${mousePosition.x}px`,
           top: `${mousePosition.y}px`,
           transform: 'translate(-50%, -50%)',
-          opacity: isHovering ? 0.4 : 0,
+          opacity: isHovering ? 0.3 : 0,
           transition: 'opacity 0.3s ease-out',
         }}
       >
         <div
-          className="w-32 h-32 rounded-full"
+          className="w-20 h-20 rounded-full"
           style={{
-            background: 'radial-gradient(circle, rgba(59, 130, 246, 0.3) 0%, transparent 70%)',
-            filter: 'blur(20px)',
+            background: 'radial-gradient(circle, rgba(59, 130, 246, 0.25) 0%, transparent 70%)',
+            filter: 'blur(15px)',
           }}
         />
       </div>
+
+      {/* Shining background animations */}
+      <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
+        {/* Animated shining orbs */}
+        {[...Array(6)].map((_, i) => {
+          const positions = [
+            { top: '10%', left: '15%' },
+            { top: '20%', right: '20%' },
+            { top: '60%', left: '10%' },
+            { bottom: '15%', right: '15%' },
+            { top: '40%', right: '10%' },
+            { bottom: '25%', left: '25%' },
+          ]
+          const delays = [0, 1, 2, 0.5, 1.5, 2.5]
+          const durations = [4, 5, 6, 4.5, 5.5, 6.5]
+          
+          return (
+            <div
+              key={`shining-${i}`}
+              className="absolute rounded-full"
+              style={{
+                ...positions[i],
+                width: `${150 + i * 30}px`,
+                height: `${150 + i * 30}px`,
+                background: `radial-gradient(circle, rgba(${59 + i * 20}, ${130 + i * 10}, ${246 - i * 15}, 0.15) 0%, transparent 70%)`,
+                filter: 'blur(40px)',
+                animation: `shining ${durations[i]}s ease-in-out infinite`,
+                animationDelay: `${delays[i]}s`,
+              }}
+            />
+          )
+        })}
+
+        {/* Smaller twinkling stars */}
+        {starPositions.map((star, i) => (
+          <div
+            key={`star-${i}`}
+            className="absolute rounded-full"
+            style={{
+              top: `${star.top}%`,
+              left: `${star.left}%`,
+              width: '4px',
+              height: '4px',
+              background: 'rgba(255, 255, 255, 0.6)',
+              boxShadow: '0 0 10px rgba(255, 255, 255, 0.8), 0 0 20px rgba(59, 130, 246, 0.6)',
+              animation: `twinkle ${star.duration}s ease-in-out infinite`,
+              animationDelay: `${star.delay}s`,
+            }}
+          />
+        ))}
+
+        {/* Pulsing light rays */}
+        <div
+          className="absolute top-1/4 left-1/3 w-96 h-96"
+          style={{
+            background: 'radial-gradient(ellipse at center, rgba(59, 130, 246, 0.1) 0%, transparent 70%)',
+            filter: 'blur(60px)',
+            animation: 'pulse 6s ease-in-out infinite',
+          }}
+        />
+        <div
+          className="absolute bottom-1/4 right-1/3 w-96 h-96"
+          style={{
+            background: 'radial-gradient(ellipse at center, rgba(147, 51, 234, 0.1) 0%, transparent 70%)',
+            filter: 'blur(60px)',
+            animation: 'pulse 8s ease-in-out infinite',
+            animationDelay: '2s',
+          }}
+        />
+      </div>
+
+      {/* CSS Animations */}
+      <style>{`
+        @keyframes shining {
+          0%, 100% {
+            opacity: 0.3;
+            transform: scale(1);
+          }
+          50% {
+            opacity: 0.6;
+            transform: scale(1.2);
+          }
+        }
+        
+        @keyframes twinkle {
+          0%, 100% {
+            opacity: 0.3;
+            transform: scale(1);
+          }
+          50% {
+            opacity: 1;
+            transform: scale(1.5);
+          }
+        }
+        
+        @keyframes pulse {
+          0%, 100% {
+            opacity: 0.2;
+            transform: scale(1);
+          }
+          50% {
+            opacity: 0.4;
+            transform: scale(1.3);
+          }
+        }
+      `}</style>
     </>
   )
 }
