@@ -6,10 +6,12 @@ import About from './components/About'
 import Testimonials from './components/Testimonials'
 import Contact from './components/Contact'
 import Footer from './components/Footer'
+import MouseAnimation from './components/MouseAnimation'
 
 function App() {
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen relative">
+      <MouseAnimation />
       <Header />
       <Hero />
       <Services />

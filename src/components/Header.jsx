@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import { motion } from 'framer-motion'
 import { FaBars, FaTimes } from 'react-icons/fa'
 
 const Header = () => {
@@ -29,8 +30,12 @@ const Header = () => {
     >
       <nav className="container-custom">
         <div className="flex items-center justify-between py-4">
-          <div className="text-xl font-semibold text-white tracking-tight">
-            Helvaris
+          <div className="flex items-center">
+            <img 
+              src="/logo.png" 
+              alt="Helvaris Logo" 
+              className="h-10 w-auto object-contain transition-all duration-300 hover:scale-110 hover:drop-shadow-[0_0_20px_rgba(59,130,246,0.5)] cursor-pointer"
+            />
           </div>
 
           {/* Desktop Menu */}
